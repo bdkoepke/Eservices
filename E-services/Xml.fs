@@ -11,7 +11,7 @@ open FSharp.Data.Runtime
 open System.Xml.Schema
 
 [<Literal>]
-let private AbsoluteResolutionFolder = __SOURCE_DIRECTORY__ + "\\xmlschm1-23-1"
+let private AbsoluteResolutionFolder = __SOURCE_DIRECTORY__ + "\\xmlschm1-24-1"
 
 [<Literal>]
 let LayoutTopologieSchema = "layout-topologie.xsd"

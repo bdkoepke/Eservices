@@ -21,6 +21,7 @@ type Address =
 
 type Income =
     { employmentIncome: double
+      cppeContribution: option<double>
       cppContribution: double
       employeeEmploymentInsurance: option<double>
       employmentInsuranceEarn: double
@@ -47,7 +48,9 @@ let incomeToT4Amt (i: Income) =
     LayoutTopologie.T4Amt(
         emptIncamt = (i.employmentIncome |> toCurrency |> Some),
         cppCntrbAmt = (i.cppContribution |> toCurrency |> Some),
+        cppeCntrbAmt = (i.cppeContribution |> Option.map toCurrency),
         qppCntrbAmt = None,
+        qppeCntrbAmt = None,
         empeEipAmt = (i.employeeEmploymentInsurance |> Option.map toCurrency),
         rppCntrbAmt = None,
         itxDdctAmt = ((i.federalIncomeTax + i.provincialIncomeTax) |> toCurrency |> Some),
@@ -101,6 +104,7 @@ let t4InfoToT4Slip
         emptCd = None,
         rptTcd = (reportTypeToCode t4Info.reportType),
         emptProvCd = string t4Info.provinceOfEmployment,
+        emprDntlBenRptCd = None,
         t4Amt = Some t4Amt,
         othInfo = None
     )
@@ -151,11 +155,13 @@ let t4SlipsToT4Tamt (t4Slips: array<LayoutTopologie.T4Slip>) =
         LayoutTopologie.T4Tamt(
             totEmptIncamt = sumT4Amts (fun x -> x.EmptIncamt),
             totEmpeCppAmt = sumT4Amts (fun x -> x.CppCntrbAmt),
+            totEmpeCppeAmt = sumT4Amts (fun x -> x.CppeCntrbAmt),
             totEmpeEipAmt = sumT4Amts (fun x -> x.EmpeEipAmt),
             totRppCntrbAmt = sumT4Amts (fun x -> x.RppCntrbAmt),
             totItxDdctAmt = sumT4Amts (fun x -> x.ItxDdctAmt),
             totPadjAmt = sumT4Amts (fun x -> x.PadjAmt),
             totEmprCppAmt = sumT4Amts (fun x -> x.CppCntrbAmt),
+            totEmprCppeAmt = sumT4Amts (fun x -> x.CppeCntrbAmt),
             totEmprEipAmt = sumT4Amts (fun x -> x.EmpeEipAmt)
         )
         |> Some
@@ -285,15 +291,9 @@ let t4ToReturn (t4: LayoutTopologie.T4) =
         prpp = None,
         rrspOrRrifNonQualifiedInvestment = None,
         partXviii = None,
-        t3d = None,
-        t3p = None,
-        t3ri = None,
-        t3gr = None,
-        t3prp = None,
-        t1061 = None,
-        t2000 = None,
         partXix = None,
-        t2202 = None
+        t2202 = None,
+        t4fhsa = None
     )
 
 let submission =
@@ -324,15 +324,19 @@ let submission =
               transmitterNumber = "MM555555"
               transmitterType = TransmitterType.IfYouAreSubmittingYourReturns
               language = Language.English }
+
         let trnmtrNm = fullNameToTrnmtrNm employeeName
         let trnmtrAddr = addressToTrnmtrAddr employeeAddress
+
         let cntc =
             let contactEmail = "contact@consoto.com"
             contactToCntc contact contactEmail
+
         transmitInfoToT619 transmitInfo trnmtrNm trnmtrAddr cntc
 
     let t4 =
         let businessNumber = "999999999RP0001"
+
         let t4slip =
             let t4Info =
                 { employeeSIN = "999999999"
@@ -342,32 +346,42 @@ let submission =
                   isEIExempt = true
                   provinceOfEmployment = Province.BC
                   reportType = reportType }
+
             let t4Amt =
                 let income =
                     { employmentIncome = 400000.0
+                      cppeContribution = None
                       cppContribution = 3754.45
                       employeeEmploymentInsurance = None
                       employmentInsuranceEarn = 0
                       cppQppEarn = 66600.0
                       federalIncomeTax = 104862.0
                       provincialIncomeTax = 59099.0 }
+
                 incomeToT4Amt income
+
             let empeNm = fullNameToEmpeNm employeeName
             let empeAddr = addressToEmpeAddr employeeAddress
             t4InfoToT4Slip t4Info empeNm empeAddr t4Amt
+
         let t4Summary =
             { businessNumber = businessNumber
               taxYear = 2023
               reportTypeCode = ReportType.Originals
               preparerSIN = "999999999" }
+
         let cntc2 = contactToCntc2 contact
+
         let emprNm =
             let employerName = "Contoso, LTD"
             employerNameToEmprNm employerName
+
         let emprAddr =
             let employerAddress = employeeAddress
             addressToEmprAddr employerAddress
+
         t4SlipsSummaryToT4 t4Summary emprNm emprAddr cntc2 [| t4slip |]
+
     let ret = t4ToReturn t4
     LayoutTopologie.Submission(t619, returns = [| ret |])
 

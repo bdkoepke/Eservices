@@ -2,12 +2,13 @@
 
 <!--
 Description	Common Simple, Complex and Element Types for INFODEC returns
-Version#:	1.19 (version #.yy)
+Version#:	1.23 (version #.yy)
 Revision History:
 Mar 2013	Initial creation to allow new Infodec schemas to follow the new CRA XML standard.
 Apr 2014	Updated to include common types used for PartXVIII return.
 May 2015	Updated to include common types used for T3 special returns.
 May 2019	Updated to include common types used for T2202 return.
+May 2023	Updated to include common types used for T4FHSA return.
 -->
 
 <xsd:schema xmlns:sdt="http://www.cra-arc.gc.ca/xmlns/sdt/2-2-0" 
@@ -69,6 +70,13 @@ May 2019	Updated to include common types used for T2202 return.
 		</xsd:restriction>
 	</xsd:simpleType>
 
+	<xsd:simpleType name="Length12PostalZipCodeType">
+		<xsd:restriction base="sdt:CodeType">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="12"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
 	<xsd:simpleType name="ProvinceStateCountryCodeType">
 		<xsd:union memberTypes="ccms:CanadianProvinceTerritoryCodeType ccms:USAStateCodeType ccms:CountryCodeType"/>
 	</xsd:simpleType>
@@ -113,6 +121,16 @@ May 2019	Updated to include common types used for T2202 return.
 		</xsd:annotation>
 		<xsd:restriction base="sdt:NumberType">
 			<xsd:pattern value="\d{9}(RZ)\d{4}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<!-- Added for T4FHSA -->
+	<xsd:simpleType name="BNRPType">
+		<xsd:annotation>
+			<xsd:documentation>Root = 999999999, Program ID = RP, Account # = 9999</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="sdt:NumberType">
+			<xsd:pattern value="\d{9}(RP)\d{4}"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 
@@ -224,6 +242,18 @@ May 2019	Updated to include common types used for T2202 return.
 		<xsd:restriction base="sdt:NumberType">
 			<xsd:minLength value="1"/>
 			<xsd:maxLength value="30"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="Length1to3CountType">
+		<xsd:restriction base="sdt:CountType">
+			<xsd:pattern value="\d{1,3}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="Length1to4CountType">
+		<xsd:restriction base="sdt:CountType">
+			<xsd:pattern value="\d{1,4}"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 
@@ -374,6 +404,133 @@ May 2019	Updated to include common types used for T2202 return.
 		</xsd:restriction>
 	</xsd:simpleType>
 
+	<!-- Added for T4FHSA -->
+	<xsd:simpleType name="Length10AlphanumericType">
+		<xsd:restriction base="xsd:string">
+	    		<xsd:pattern value="[a-zA-Z0-9]+"/>
+			<xsd:maxLength value="10"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="Length20AlphanumericWithDashType">
+		<xsd:annotation>
+			<xsd:documentation>letters, numbers, hyphens (not at the start or at the end) </xsd:documentation>
+		</xsd:annotation>
+
+		<xsd:restriction base="xsd:string">
+	    		<xsd:pattern value="[a-zA-Z0-9]+([a-zA-Z0-9\-])*[a-zA-Z0-9]+"/>
+			<xsd:maxLength value="20"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="Alphanumeric5SpecialCharType">
+		<xsd:annotation>
+			<xsd:documentation>letters, numbers, spaces ( ), hyphens (-), periods (.), ampersands, and apostrophes (').</xsd:documentation>
+		</xsd:annotation>
+	
+		<xsd:restriction base="xsd:token">
+	    		<xsd:pattern value="[a-zA-Z0-9 \-.&amp;']+"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="AlphaWithFrench5SpecialCharType">
+		<xsd:annotation>
+			<xsd:documentation>letters (English and French, numbers, spaces ( ), hyphens (-), periods (.), ampersands, and apostrophes (').</xsd:documentation>
+		</xsd:annotation>
+	
+		<xsd:restriction base="xsd:token">
+	    		<xsd:pattern value="[a-zA-Zâàç¢éêëèîïÂÀÇÉÊËÈÎÏôûüÔÛÜùÙ0-9 \-.&amp;']+"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="Alphanumeric7SpecialCharType">
+		<xsd:annotation>
+			<xsd:documentation>letters, numbers, hyphens (-), periods (.), ampersands, apostrophes ('), quotation marks ("), number signs (#) and forward slashes (/).</xsd:documentation>
+		</xsd:annotation>
+	
+		<xsd:restriction base="xsd:string">
+	    		<xsd:pattern value="[a-zA-Z0-9\-.&amp;&apos;&quot;#/]+"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="Alphanumeric11SpecialCharType">
+		<xsd:annotation>
+			<xsd:documentation>letters, numbers, spaces ( ), hyphens (-), periods (.), ampersands, apostrophes ('), quotation marks ("), commas (,), slashes (/), number signs (#), and parentheses (())</xsd:documentation>
+		</xsd:annotation>
+	
+		<xsd:restriction base="xsd:token">
+	    		<xsd:pattern value="[a-zA-Z0-9 \-.&amp;&apos;&quot;,/#()]+"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="AlphaWithFrench11SpecialCharType">
+		<xsd:annotation>
+			<xsd:documentation>letters (English and French), numbers, spaces ( ), hyphens (-), periods (.), ampersands, apostrophes ('), quotation marks ("), commas (,), slashes (/), number signs (#), and parentheses (())</xsd:documentation>
+		</xsd:annotation>
+	
+		<xsd:restriction base="xsd:token">
+	    		<xsd:pattern value="[a-zA-Zâàç¢éêëèîïÂÀÇÉÊËÈÎÏôûüÔÛÜùÙ0-9 \-.&amp;&apos;&quot;,/#()]+"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="Alphanumeric17SpecialCharType">
+		<xsd:annotation>
+			<xsd:documentation>letters, numbers, spaces ( ), hyphens (-), periods (.),  ampersands, apostrophes ('), quotation marks ("), commas (,), slashes(/), number signs (#), question marks(?), exclamation marks (!), ampersands(@), dollar signs($), percentages (%),  asterixis (*), and brackets (()).</xsd:documentation>
+		</xsd:annotation>
+	
+		<xsd:restriction base="xsd:token">
+	    		<xsd:pattern value="[a-zA-Z0-9 \-.&amp;&apos;&quot;,/#?!@$%*()]+"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="Length28AlphaWithFrench5CharType">
+		<xsd:restriction base="AlphaWithFrench5SpecialCharType">
+			<xsd:maxLength value="28"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="Length30Alphanumeric5CharType">
+		<xsd:restriction base="Alphanumeric5SpecialCharType">
+			<xsd:maxLength value="30"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="Length30AlphaWithFrench5CharType">
+		<xsd:restriction base="AlphaWithFrench5SpecialCharType">
+			<xsd:maxLength value="30"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="Length30Alphanumeric7CharType">
+		<xsd:restriction base="Alphanumeric7SpecialCharType">
+			<xsd:maxLength value="30"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="Length30Alphanumeric11CharType">
+		<xsd:restriction base="Alphanumeric11SpecialCharType">
+			<xsd:maxLength value="30"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="Length30AlphaWithFrench11CharType">
+		<xsd:restriction base="AlphaWithFrench11SpecialCharType">
+			<xsd:maxLength value="30"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="Length35AlphaWithFrench11CharType">
+		<xsd:restriction base="AlphaWithFrench11SpecialCharType">
+			<xsd:maxLength value="35"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="AmendmentNoteType">
+		<xsd:restriction base="Alphanumeric17SpecialCharType">
+			<xsd:maxLength value="1309"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
 	<!--================== Complex Types =======================-->
 
 	<!--                                                        -->
@@ -558,7 +715,7 @@ May 2019	Updated to include common types used for T2202 return.
 		</xsd:sequence>
 	</xsd:complexType>
 
-        <!-- Added for T3 special returns -->
+	<!-- Added for T3 special returns -->
 	<xsd:complexType name="CountryCodeAddressType">
 		<xsd:sequence>
 			<xsd:element ref="AddressLine1Text"/>						
@@ -570,7 +727,7 @@ May 2019	Updated to include common types used for T2202 return.
 		</xsd:sequence>
 	</xsd:complexType>
 
-        <!-- Added for T2202 return -->
+	<!-- Added for T2202 return -->
 	<xsd:complexType name="RequiredLine1AddressType">
 		<xsd:sequence>
 			<xsd:element ref="AddressLine1Text"/>						
@@ -619,6 +776,7 @@ May 2019	Updated to include common types used for T2202 return.
 		</xsd:sequence>
 	</xsd:complexType>
 
+
 	<xsd:complexType name="TwoLinedLength30NameType">
 		<xsd:sequence>
 			<xsd:element name="NameLine1Text" type="ccms:Character30TextType"/>
@@ -666,7 +824,6 @@ May 2019	Updated to include common types used for T2202 return.
 		</xsd:sequence>
 	</xsd:complexType>
 
-	<!-- Added for T3 special returns -->
 	<xsd:complexType name="YYYYMMDDDateType">
 		<xsd:sequence>
 			<xsd:element ref="Year"/>
@@ -694,7 +851,7 @@ May 2019	Updated to include common types used for T2202 return.
 
 	<xsd:element name="ProvinceStateCode" type="ccms:ProvinceTerritoryStateCodeType"/>
 
-        <!-- Length 3 country code -->
+	<!-- Length 3 country code -->
 	<xsd:element name="CountryCode" type="ccms:CountryCodeType"/>
 
 	<xsd:element name="PostalZipCode" type="PostalZipCodeType"/>
@@ -779,4 +936,62 @@ May 2019	Updated to include common types used for T2202 return.
 		</xsd:all>
 	</xsd:complexType>
 	
+	<!-- Added for T4FHSA return -->
+	<xsd:complexType name="SlipRecipientNameType">
+		<xsd:all>
+			<xsd:element name="FamilyName" type="Length30AlphaWithFrench5CharType"></xsd:element>
+			<xsd:element name="GivenName" type="Length30AlphaWithFrench5CharType"></xsd:element>
+			<xsd:element name="Initial" minOccurs="0"> 
+				<xsd:complexType >
+					<xsd:simpleContent>
+						<xsd:restriction base="sdt:NameType">
+							<xsd:pattern value="[a-zA-Z]{1}"/>
+						</xsd:restriction>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:all>
+	</xsd:complexType>
+
+	<!-- Added for T4FHSA return -->
+	<xsd:complexType name="FamilyGivenNameType">
+		<xsd:all>
+			<xsd:element name="FamilyName" type="Length30AlphaWithFrench5CharType"></xsd:element>
+			<xsd:element name="GivenName" type="Length30AlphaWithFrench5CharType" minOccurs="0"></xsd:element>
+		</xsd:all>
+	</xsd:complexType>
+	
+	<!-- Added for T4FHSA return -->
+	<xsd:complexType name="FilerNameType">
+		<xsd:sequence>
+			<xsd:element name="NameLine1Text" type="Length35AlphaWithFrench11CharType"/>
+			<xsd:element name="NameLine2Text" type="Length35AlphaWithFrench11CharType" minOccurs="0"/>
+			<xsd:element name="NameLine3Text" type="Length35AlphaWithFrench11CharType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- Added for T4FHSA return -->
+	<xsd:complexType name="OptionalLine2CountryCodeAddressType">
+		<xsd:sequence>
+			<xsd:element name="AddressLine1Text" type="Length30AlphaWithFrench5CharType"/>						
+			<xsd:element name="AddressLine2Text" type="Length30AlphaWithFrench5CharType" minOccurs="0"/> 						
+			<xsd:element name="CityName" type="Length28AlphaWithFrench5CharType"/>
+			<xsd:element ref="ProvinceStateCode"/> 						
+			<xsd:element ref="CountryCode" minOccurs="0"/> 						
+			<xsd:element name="PostalZipCode" type="Length10AlphanumericType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Added for T4FHSA return -->
+	<xsd:complexType name="FilerContactType">
+		<xsd:sequence>
+			<xsd:element name="ContactFamilyName" type="Length30AlphaWithFrench11CharType"/>
+			<xsd:element name="ContactGivenName" type="Length30AlphaWithFrench11CharType"/>
+			<xsd:element ref="ContactPhoneAreaCode"/>
+			<xsd:element ref="ContactPhoneNumber"/>
+			<xsd:element name="ContactPhoneExtensionNumber" type="Length1to5NumberType" minOccurs="0"/>
+			<xsd:element ref="ContactEmailAddress"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
 </xsd:schema>

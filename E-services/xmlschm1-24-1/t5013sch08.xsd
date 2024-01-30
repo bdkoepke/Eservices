@@ -18,7 +18,6 @@ targetNamespace="http://www.cra-arc.gc.ca/enov/ol/interfaces/efile/partnership/o
 	elementFormDefault="qualified" attributeFormDefault="unqualified" version="ols8/1-0-1">
 <xsd:import namespace="http://www.cra-arc.gc.ca/xmlns/sdt/2-2-0" schemaLocation="standarddatatypes.xsd"/> 
 <xsd:import namespace="http://www.cra-arc.gc.ca/xmlns/ccms/1-0-0" schemaLocation="cracommonstructures.xsd"/> 	
-	
 <!-- T5013Schedule8Data is also referenced by other schemas for importing purposes -->
 	<xsd:element name="T5013Schedule8Data" type="ols8:Schedule8DataType"/>
 	<xsd:complexType name="Schedule8DataType">
@@ -27,7 +26,12 @@ targetNamespace="http://www.cra-arc.gc.ca/enov/ol/interfaces/efile/partnership/o
 			<xsd:element ref="ols8:AssociatedEPOPIndicator" minOccurs="0"/>
 			<xsd:element ref="ols8:Schedule8AgreementDetails" minOccurs="0" maxOccurs="2000"/>
 			<xsd:element ref="ols8:ImmediateExpensingLimitAmount"  minOccurs="0" maxOccurs="1"/>
-			<!-- Part 2 -->
+		    <!-- Part 2 -->
+		    <xsd:element ref="ols8:CcpcIndicator" minOccurs="0"/>
+		    <xsd:element ref="ols8:MultipleSourceIncomeIndicator" minOccurs="0"/>
+			<xsd:element ref="ols8:Schedule8IncomeDetails" minOccurs="0" maxOccurs="2000"/>
+			<xsd:element ref="ols8:NetIncomePreCCA"  minOccurs="0" maxOccurs="1"/>
+			<!-- Part 3 -->
 			<xsd:element ref="ols8:Schedule8CapitalCostAllowanceDetails" minOccurs="0" maxOccurs="2000"/>
 			<xsd:element ref="ols8:CCARecaptureTotalAmount"  minOccurs="0" maxOccurs="1"/>
 			<xsd:element ref="ols8:TerminalLossTotalAmount"  minOccurs="0" maxOccurs="1"/>
@@ -41,6 +45,15 @@ targetNamespace="http://www.cra-arc.gc.ca/enov/ol/interfaces/efile/partnership/o
 			<xsd:element ref="ols8:EPOPName"  minOccurs="0" />
 			<xsd:element ref="ols8:IDNumber"  minOccurs="0" />
 			<xsd:element ref="ols8:PercentageAssigned"  minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	 <xsd:element name="Schedule8IncomeDetails" type="ols8:Schedule8IncomeDetailsType"/>
+	<xsd:complexType name="Schedule8IncomeDetailsType">
+		<xsd:sequence>
+			<xsd:element ref="ols8:SourceOfIncome"  minOccurs="0" />
+			<xsd:element ref="ols8:IncomePreCCADeductions"  minOccurs="0" />
+			<xsd:element ref="ols8:AggregateDiep"  minOccurs="0" />
 		</xsd:sequence>
 	</xsd:complexType>
 
@@ -68,6 +81,8 @@ targetNamespace="http://www.cra-arc.gc.ca/enov/ol/interfaces/efile/partnership/o
 			<xsd:element ref="ols8:ClosingUCCAmount"  minOccurs="0" />
 		</xsd:sequence>
 	</xsd:complexType>
+	
+
 
 	<!-- Part 1 -->
 	<xsd:element name="AssociatedEPOPIndicator" type="ccms:OneTwoCodeType"/>
@@ -81,7 +96,17 @@ targetNamespace="http://www.cra-arc.gc.ca/enov/ol/interfaces/efile/partnership/o
 	</xsd:element>
 	<xsd:element name="PercentageAssigned" type="sdt:PercentType"/>
 	<xsd:element name="ImmediateExpensingLimitAmount" type="sdt:AmountType"/>
-	<!-- Part 2 -->
+	
+		<!-- Part 2 -->
+    <xsd:element name="CcpcIndicator" type="ccms:OneTwoCodeType"></xsd:element>
+    <xsd:element name="MultipleSourceIncomeIndicator" type="ccms:OneTwoCodeType"></xsd:element>
+	<xsd:element name="NetIncomePreCCA" type="sdt:AmountType"></xsd:element>
+
+	<xsd:element name="SourceOfIncome" type="ccms:Name175CharacterType"></xsd:element>
+	<xsd:element name="IncomePreCCADeductions" type="sdt:AmountType"></xsd:element>
+	<xsd:element name="AggregateDiep" type="sdt:AmountType"></xsd:element>
+	
+	<!-- Part 3 -->
 	<xsd:element name="CCAClassNumber" type="sdt:NumberType"/>
 	<xsd:element name="OpeningUCCAmount" type="sdt:AmountType"/>
 	<xsd:element name="CCAAcquisitionCostAmount" type="sdt:AmountType"/>

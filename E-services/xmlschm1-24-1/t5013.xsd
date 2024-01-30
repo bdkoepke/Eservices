@@ -240,6 +240,10 @@ Version#:	1.17 (version #.yy)
 238     Ventilation System Installation Tax Credit                                      - Multi-jurisdictional field
 239     Critical Mineral Exploration Tax Credit (CMETC)                                 - Multi-jurisdictional field
 240     Portion subject to an interest-free period (CMETC)                              - Multi-jurisdictional field
+241     Critical Mineral Exploration Tax Credit - British Colombia(CMETC)				- not a multi-jurisdictional field
+242		Critical Mineral Exploration Tax Credit - Saskatchewan (CMETC)					- not a multi-jurisdictional field
+243		Critical Mineral Exploration Tax Credit - Manitoba (CMETC)						- not a multi-jurisdictional field
+244		Critical Mineral Exploration Tax Credit - Ontario (CMETC)						- not a multi-jurisdictional field
 
 			</xsd:documentation> 
 		</xsd:annotation>

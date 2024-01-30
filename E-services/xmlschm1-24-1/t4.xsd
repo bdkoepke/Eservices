@@ -20,6 +20,7 @@ Version#:	1.16 (version #.yy)
 			<xsd:element name="empt_cd" type="numeric2Type" minOccurs="0"/>
 			<xsd:element name="rpt_tcd" type="slipDataType"/> 
 			<xsd:element name="empt_prov_cd" type="provinceType"/>
+			<xsd:element name="empr_dntl_ben_rpt_cd" type="charNum1Type" minOccurs="0"/>
 			<xsd:element name="T4_AMT" type="T4AmtType" minOccurs="0"/>
 			<xsd:element name="OTH_INFO" type="OtherInformationType" minOccurs="0">
 				<xsd:unique name="Other_T4_Info_Fields">
@@ -77,7 +78,9 @@ Version#:	1.16 (version #.yy)
 		<xsd:all>
 			<xsd:element name="empt_incamt" type="decimal10Type" minOccurs="0"/>
 			<xsd:element name="cpp_cntrb_amt" type="decimal6Type" minOccurs="0"/>
+			<xsd:element name="cppe_cntrb_amt" type="decimal6Type" minOccurs="0"/>
 			<xsd:element name="qpp_cntrb_amt" type="decimal6Type" minOccurs="0"/>
+			<xsd:element name="qppe_cntrb_amt" type="decimal6Type" minOccurs="0"/>
 			<xsd:element name="empe_eip_amt" type="decimal6Type" minOccurs="0"/>
 			<xsd:element name="rpp_cntrb_amt" type="decimal7Type" minOccurs="0"/>
 			<xsd:element name="itx_ddct_amt" type="decimal10Type" minOccurs="0"/>
@@ -162,11 +165,13 @@ Version#:	1.16 (version #.yy)
 		<xsd:all>
 			<xsd:element name="tot_empt_incamt" type="decimal13Type" minOccurs="0"/>
 			<xsd:element name="tot_empe_cpp_amt" type="decimal11Type" minOccurs="0"/>
+			<xsd:element name="tot_empe_cppe_amt" type="decimal11Type" minOccurs="0"/>
 			<xsd:element name="tot_empe_eip_amt" type="decimal11Type" minOccurs="0"/>
 			<xsd:element name="tot_rpp_cntrb_amt" type="decimal11Type" minOccurs="0"/>
 			<xsd:element name="tot_itx_ddct_amt" type="decimal13Type" minOccurs="0"/>
 			<xsd:element name="tot_padj_amt" type="decimal13Type" minOccurs="0"/>
 			<xsd:element name="tot_empr_cpp_amt" type="decimal11Type" minOccurs="0"/>
+			<xsd:element name="tot_empr_cppe_amt" type="decimal11Type" minOccurs="0"/>
 			<xsd:element name="tot_empr_eip_amt" type="decimal11Type" minOccurs="0"/>
 		</xsd:all>
 	</xsd:complexType>

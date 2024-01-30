@@ -2,11 +2,12 @@
 
 <!--
 Description	Layout topologie - Common Record Layout
-Version#:	1.17 (version #.yy)
+Version#:	1.23 (version #.yy)
 Revision History:
 Jan 2016	Add T3 special returns.
 Jan 2017	Add T3 general return.
-
+May 2023	Add T4FHSA return;
+			Remove T3D, T3P, T3RI, T3PRP, T3GR, T1061 and T2000 returns.		
 -->
 
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
@@ -36,15 +37,9 @@ Jan 2017	Add T3 general return.
 	<xsd:include schemaLocation="prpp-rpac.xsd"/>
 	<xsd:include schemaLocation="rrsp-rrif-nqi.xsd"/>
 	<xsd:include schemaLocation="partxviii.xsd"/>
-	<xsd:include schemaLocation="t3d.xsd"/>
-	<xsd:include schemaLocation="t3p.xsd"/>
-	<xsd:include schemaLocation="t3ri.xsd"/>
-	<xsd:include schemaLocation="t3gr.xsd"/>
-	<xsd:include schemaLocation="t3prp.xsd"/>
-	<xsd:include schemaLocation="t1061.xsd"/>
-	<xsd:include schemaLocation="t2000.xsd"/>
 	<xsd:include schemaLocation="partxix.xsd"/>
 	<xsd:include schemaLocation="t2202.xsd"/>
+	<xsd:include schemaLocation="t4fhsa.xsd"/>
 	<xsd:include schemaLocation="frms.xsd"/>
 	<!-- @@@@    Common Record Layout     @@@@ -->
 	<xsd:element name="Submission" type="ReturnType"/>

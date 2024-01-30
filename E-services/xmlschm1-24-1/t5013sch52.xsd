@@ -32,9 +32,9 @@ targetNamespace="http://www.cra-arc.gc.ca/enov/ol/interfaces/efile/partnership/o
 			<xsd:element ref="ols52:TotalAssistanceCanadianDevelopmentExpensesAmount" minOccurs="0" />
 			<xsd:element ref="ols52:Schedule52QualifiedITCDetails"  minOccurs="0" maxOccurs="2000"/>
 			<xsd:element ref="ols52:TotalITCMiningExplorationAmount" minOccurs="0" />
-			<xsd:element ref="ols52:TotalITCInterestFreePeriodAmount" minOccurs="0" />
-            <xsd:element ref="ols52:TotalITCMineralExplorationCmetcAmount" minOccurs="0" />
-            <xsd:element ref="ols52:TotalITCInterestFreePeriodCmetcAmount" minOccurs="0" />
+			<xsd:element ref="ols52:TotalITCInterestFreePeriodAmount" minOccurs="0" /> 
+			<xsd:element ref="ols52:TotalITCMineralExplorationCmetcAmount" minOccurs="0" />
+			<xsd:element ref="ols52:TotalITCInterestFreePeriodCmetcAmount" minOccurs="0" />
 			<xsd:element ref="ols52:Schedule52QualifiedProvincialTaxCreditDetails"  minOccurs="0" maxOccurs="2000"/>
 			
 			<xsd:element ref="ols52:Schedule52TotalQualifiedProvincialTaxCredits" minOccurs="0" maxOccurs="20"/>
@@ -137,10 +137,10 @@ targetNamespace="http://www.cra-arc.gc.ca/enov/ol/interfaces/efile/partnership/o
 	<xsd:element name="ITCInterestFreePeriodAmount" type="sdt:AmountType"/>
     <xsd:element name="ITCMineralExplorationCmetcAmount" type="sdt:AmountType"/>
     <xsd:element name="ITCInterestFreePeriodCmetcAmount" type="sdt:AmountType"/>
-	<xsd:element name="TotalITCMiningExplorationAmount"  type="sdt:AmountType"/>
+    <xsd:element name="TotalITCMiningExplorationAmount"  type="sdt:AmountType"/>
 	<xsd:element name="TotalITCInterestFreePeriodAmount" type="sdt:AmountType"/>
-    <xsd:element name="TotalITCMineralExplorationCmetcAmount" type="sdt:AmountType"/>
-    <xsd:element name="TotalITCInterestFreePeriodCmetcAmount" type="sdt:AmountType"/>
+	<xsd:element name="TotalITCMineralExplorationCmetcAmount" type="sdt:AmountType"/>
+	<xsd:element name="TotalITCInterestFreePeriodCmetcAmount" type="sdt:AmountType"/>
 	
 	<xsd:element name="Schedule52QualifiedProvincialTaxCreditDetails" type="ols52:Schedule52QualifiedProvincialTaxCreditDetailsType"/>
 	<xsd:element name="QualifiedIssuingCorporationIdentificationNumber" type="ccms:BN15Type"/>

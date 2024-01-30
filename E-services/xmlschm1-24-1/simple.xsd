@@ -602,6 +602,11 @@ Version#:	1.16 (version #.yy)
 			<xsd:pattern value="\p{L}{1}"/>
 		</xsd:restriction>
 	</xsd:simpleType>
+	<xsd:simpleType name="charNum1Type">
+              <xsd:restriction base="xsd:string">
+                     <xsd:pattern value="\P{L}{1}"/>
+              </xsd:restriction>
+       </xsd:simpleType>
 	<xsd:simpleType name="char3Type">
 		<xsd:restriction base="xsd:string">
 			<xsd:pattern value="\p{L}{3}|\p{N}{3}"/>

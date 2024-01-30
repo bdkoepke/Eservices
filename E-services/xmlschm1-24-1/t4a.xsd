@@ -15,6 +15,7 @@ Version#:	1.16 (version #.yy)
 			<xsd:element name="RCPNT_ADDR" type="CanadaAddressType" minOccurs="0"/>
 			<xsd:element name="rcpnt_nbr" type="char20Type" minOccurs="0"/>
 			<xsd:element name="bn" type="bnType"/>
+			<xsd:element name="payr_dntl_ben_rpt_cd" type="charNum1Type" minOccurs="0"/>
 			<xsd:element name="ppln_dpsp_rgst_nbr" type="int7Type" minOccurs="0"/>
 			<xsd:element name="rpt_tcd" type="slipDataType"/>
 			<xsd:element name="T4A_AMT" type="T4aAmtType" minOccurs="0"/>
