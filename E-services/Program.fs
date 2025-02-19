@@ -34,6 +34,9 @@ type SocialInsuranceNumber = string
 let fullNameToEmpeNm (n: FullName) =
     LayoutTopologie.EmpeNm(snm = n.surName, gvnNm = Some n.givenName, init = Some n.middleInitial)
 
+let fullNameToTransmitterName (transmitterName: FullName) =
+    LayoutTopologie.TransmitterName(l1Nm = transmitterName.ToString())
+
 let addressToEmpeAddr (a: Address) =
     LayoutTopologie.EmpeAddr(
         addrL1Txt = Some a.street,
@@ -207,20 +210,6 @@ let contactToCntc (contact: Contact) (email: Email) =
         secCntcEmailArea = None
     )
 
-type TransmitterType =
-    | IfYouAreSubmittingYourReturns
-    | IfYouAreSubmittingReturnsForOthers
-    | IfYouAreSubmittingYourReturnsUsingAPurchasedSoftwarePackage
-    | IfYouAreASoftwareVendor
-
-let transmitterTypeToTransmitterTypeIndicator =
-    function
-    | IfYouAreSubmittingYourReturns -> 1
-    (* Service Providers *)
-    | IfYouAreSubmittingReturnsForOthers -> 2
-    | IfYouAreSubmittingYourReturnsUsingAPurchasedSoftwarePackage -> 3
-    | IfYouAreASoftwareVendor -> 4
-
 type Language =
     | English
     | French
@@ -248,7 +237,6 @@ type TransmitInfo =
     { submissionReferenceIdentification: string
       reportType: ReportType
       transmitterAccountNumber: TransmitterAccountNumber
-      transmitterType: TransmitterType
       country: Country
       language: Language }
 
@@ -280,8 +268,6 @@ let submission =
           givenName = "Richard"
           middleInitial = "M" }
 
-    let transmitterName = employeeName.ToString()
-
     let employeeAddress =
         { street = "9999 Fake Street"
           city = "Kelowna"
@@ -300,7 +286,6 @@ let submission =
             { submissionReferenceIdentification = "AaaAAA9a"
               reportType = reportType
               transmitterAccountNumber = TransmitterAccountNumber.BN15(businessNumber)
-              transmitterType = TransmitterType.IfYouAreSubmittingYourReturns
               country = country
               language = Language.English }
 
@@ -308,7 +293,7 @@ let submission =
             let contactEmail = "contact@consoto.com"
             contactToCntc contact contactEmail
 
-        let transmitterName = LayoutTopologie.TransmitterName(l1Nm = transmitterName)
+        let transmitterName = employeeName |> fullNameToTransmitterName
 
         transmitInfoToT619 transmitInfo transmitterName cntc
 
