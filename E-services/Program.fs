@@ -47,6 +47,9 @@ let addressToEmpeAddr (a: Address) =
         pstlCd = Some a.postalCode
     )
 
+let transmitterRepIdToLayoutTopologie (transmitterRepId: string) =
+    LayoutTopologie.TransmitterRepId(repId = Some transmitterRepId)
+
 let incomeToT4Amt (i: Income) =
     LayoutTopologie.T4Amt(
         emptIncamt = (i.employmentIncome |> toCurrency |> Some),
@@ -232,10 +235,11 @@ let transmitterAccountNumberToLayoutTopologie =
     | NR4 x -> LayoutTopologie.TransmitterAccountNumber(bn9 = None, bn15 = None, nr4 = Some x, trust = None)
     | Trust x -> LayoutTopologie.TransmitterAccountNumber(bn9 = None, bn15 = None, nr4 = None, trust = Some x)
 
+type TransmitterRepId = string
 
 type TransmitInfo =
     { submissionReferenceIdentification: string
-      reportType: ReportType
+      transmitterRepId: TransmitterRepId
       transmitterAccountNumber: TransmitterAccountNumber
       country: Country
       language: Language }
@@ -247,7 +251,7 @@ let transmitInfoToT619
     =
     LayoutTopologie.T619(
         transmitterAccountNumber = (t.transmitterAccountNumber |> transmitterAccountNumberToLayoutTopologie),
-        transmitterRepId = None,
+        transmitterRepId = (t.transmitterRepId |> transmitterRepIdToLayoutTopologie |> Some),
         sbmtRefId = Some t.submissionReferenceIdentification,
         summCnt = Some "1",
         langCd = (t.language.ToShortCode() |> Some),
@@ -284,7 +288,7 @@ let submission =
     let t619 =
         let transmitInfo =
             { submissionReferenceIdentification = "AaaAAA9a"
-              reportType = reportType
+              transmitterRepId = "AAAAAAA"
               transmitterAccountNumber = TransmitterAccountNumber.BN15(businessNumber)
               country = country
               language = Language.English }
