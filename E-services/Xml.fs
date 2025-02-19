@@ -11,14 +11,27 @@ open FSharp.Data.Runtime
 open System.Xml.Schema
 
 [<Literal>]
-let private AbsoluteResolutionFolder = __SOURCE_DIRECTORY__ + "\\xmlschm1-24-1"
+let private RelativeResolutionFolder = "xmlschm1-25-5"
 
 [<Literal>]
-let LayoutTopologieSchema = "layout-topologie.xsd"
+#if WINDOWS
+let private AbsoluteResolutionFolder =
+    __SOURCE_DIRECTORY__ + "\\" + RelativeResolutionFolder
+#else
+let private AbsoluteResolutionFolder =
+    __SOURCE_DIRECTORY__ + "/" + RelativeResolutionFolder
+#endif
+
+[<Literal>]
+let LayoutTopologieSchema = "T619_T4.xsd"
 
 [<Literal>]
 let private AbsoluteLayoutTopologieSchema =
+#if WINDOWS
     AbsoluteResolutionFolder + "\\" + LayoutTopologieSchema
+#else
+    AbsoluteResolutionFolder + "/" + LayoutTopologieSchema
+#endif
 
 type LayoutTopologie =
     XmlProvider<Schema=AbsoluteLayoutTopologieSchema, ResolutionFolder=AbsoluteResolutionFolder, Global=true>
@@ -32,11 +45,15 @@ let validateXElement (xElement: XElement) (schemaFile: string) =
         let resolutionFolder =
             let cb = Assembly.GetExecutingAssembly().Location
 
-            let path = Uri.UnescapeDataString((UriBuilder(cb)).Path)
+            let path =
+                if OperatingSystem.IsWindows() then
+                    Uri.UnescapeDataString((UriBuilder(cb)).Path)
+                else
+                    cb
 
-            Path.GetDirectoryName(path)
+            Path.Combine(Path.GetDirectoryName(path), RelativeResolutionFolder)
 
-        File.OpenText(schemaFile)
+        File.OpenText(Path.Combine(resolutionFolder, schemaFile))
         |> XmlSchema.parseSchemaFromTextReader resolutionFolder
 
     XDocument(xElement).Document.Validate(schema, null)

@@ -2,24 +2,18 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <RootNamespace>E_services</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <ContentWithTargetPath Include="$(SolutionDir)\E-services\xmlschm1-23-1\*">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
-        </ContentWithTargetPath>
-    </ItemGroup>
-
-    <ItemGroup>
+        <Content Include="xmlschm1-25-5\*" CopyToOutputDirectory="Always"/>
         <Compile Include="Xml.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="FSharp.Data" Version="5.0.2" />
+      <PackageReference Include="FSharp.Data" Version="6.4.1" />
     </ItemGroup>
 
 </Project>

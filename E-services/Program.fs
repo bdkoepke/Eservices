@@ -1,4 +1,4 @@
-﻿open XML
+open XML
 
 
 type FullName =
@@ -195,19 +195,6 @@ let t4SlipsSummaryToT4
 
     LayoutTopologie.T4(t4Slips = t4Slips, t4Summary = t4Summary)
 
-let fullNameToTrnmtrNm (transmitterName: FullName) =
-    LayoutTopologie.TrnmtrNm(l1Nm = transmitterName.ToString(), l2Nm = None)
-
-let addressToTrnmtrAddr (address: Address) =
-    LayoutTopologie.TrnmtrAddr(
-        addrL1Txt = Some address.street,
-        addrL2Txt = None,
-        ctyNm = Some address.city,
-        provCd = Some(string address.province),
-        cntryCd = Some(string address.country),
-        pstlCd = Some address.postalCode
-    )
-
 type Email = string
 
 let contactToCntc (contact: Contact) (email: Email) =
@@ -238,65 +225,54 @@ type Language =
     | English
     | French
 
+    member this.ToShortCode() =
+        match this with
+        | English -> "E"
+        | French -> "F"
+
+type TransmitterAccountNumber =
+    | BN9 of BusinessNumber
+    | BN15 of BusinessNumber
+    | NR4 of BusinessNumber
+    | Trust of BusinessNumber
+
+let transmitterAccountNumberToLayoutTopologie =
+    function
+    | BN9 x -> LayoutTopologie.TransmitterAccountNumber(bn9 = Some x, bn15 = None, nr4 = None, trust = None)
+    | BN15 x -> LayoutTopologie.TransmitterAccountNumber(bn9 = None, bn15 = Some x, nr4 = None, trust = None)
+    | NR4 x -> LayoutTopologie.TransmitterAccountNumber(bn9 = None, bn15 = None, nr4 = Some x, trust = None)
+    | Trust x -> LayoutTopologie.TransmitterAccountNumber(bn9 = None, bn15 = None, nr4 = None, trust = Some x)
+
+
 type TransmitInfo =
     { submissionReferenceIdentification: string
       reportType: ReportType
-      transmitterNumber: string
+      transmitterAccountNumber: TransmitterAccountNumber
       transmitterType: TransmitterType
+      country: Country
       language: Language }
 
 let transmitInfoToT619
     (t: TransmitInfo)
-    (trnmtrNm: LayoutTopologie.TrnmtrNm)
-    (trnmtrAddr: LayoutTopologie.TrnmtrAddr)
+    (transmitterName: LayoutTopologie.TransmitterName)
     (cntc: LayoutTopologie.Cntc)
     =
     LayoutTopologie.T619(
-        sbmtRefId = t.submissionReferenceIdentification,
-        rptTcd = reportTypeToCode t.reportType,
-        trnmtrNbr = t.transmitterNumber,
-        trnmtrTcd = (transmitterTypeToTransmitterTypeIndicator t.transmitterType |> string |> Some),
-        summCnt = "1",
-        langCd =
-            (match t.language with
-             | English -> "E"
-             | French -> "F"),
-        trnmtrNm = trnmtrNm,
-        trnmtrAddr = trnmtrAddr,
+        transmitterAccountNumber = (t.transmitterAccountNumber |> transmitterAccountNumberToLayoutTopologie),
+        transmitterRepId = None,
+        sbmtRefId = Some t.submissionReferenceIdentification,
+        summCnt = Some "1",
+        langCd = (t.language.ToShortCode() |> Some),
+        transmitterName = Some transmitterName,
+        transmitterCountryCode = (t.country |> string),
         cntc = cntc
     )
 
-let t4ToReturn (t4: LayoutTopologie.T4) =
-    LayoutTopologie.Return(
-        t4 = Some t4,
-        t4a = None,
-        t4aNr = None,
-        t4rif = None,
-        t4rsp = None,
-        rrsp = None,
-        t215 = None,
-        t4aOas = None,
-        t4aP = None,
-        t1204 = None,
-        agr1 = None,
-        t4e = None,
-        t5018 = None,
-        t5007 = None,
-        t5 = None,
-        t5008 = None,
-        t3 = None,
-        safer = None,
-        nr4 = None,
-        tfsa = None,
-        prpp = None,
-        rrspOrRrifNonQualifiedInvestment = None,
-        partXviii = None,
-        partXix = None,
-        t2202 = None,
-        t4fhsa = None
-    )
+let t4ToReturn (t4: LayoutTopologie.T4) = LayoutTopologie.Return(t4 = Some t4)
 
 let submission =
+    let businessNumber = "999999999RP0001"
+    let country = Country.CAN
     let reportType = ReportType.Originals
 
     let employeeName =
@@ -304,11 +280,13 @@ let submission =
           givenName = "Richard"
           middleInitial = "M" }
 
+    let transmitterName = employeeName.ToString()
+
     let employeeAddress =
         { street = "9999 Fake Street"
           city = "Kelowna"
           province = Province.BC
-          country = Country.CAN
+          country = country
           postalCode = "A1A1A1" }
 
     let contact =
@@ -321,21 +299,20 @@ let submission =
         let transmitInfo =
             { submissionReferenceIdentification = "AaaAAA9a"
               reportType = reportType
-              transmitterNumber = "MM555555"
+              transmitterAccountNumber = TransmitterAccountNumber.BN15(businessNumber)
               transmitterType = TransmitterType.IfYouAreSubmittingYourReturns
+              country = country
               language = Language.English }
-
-        let trnmtrNm = fullNameToTrnmtrNm employeeName
-        let trnmtrAddr = addressToTrnmtrAddr employeeAddress
 
         let cntc =
             let contactEmail = "contact@consoto.com"
             contactToCntc contact contactEmail
 
-        transmitInfoToT619 transmitInfo trnmtrNm trnmtrAddr cntc
+        let transmitterName = LayoutTopologie.TransmitterName(l1Nm = transmitterName)
+
+        transmitInfoToT619 transmitInfo transmitterName cntc
 
     let t4 =
-        let businessNumber = "999999999RP0001"
 
         let t4slip =
             let t4Info =
